@@ -115,7 +115,7 @@ $('saveFolder').onclick=async()=>{
  if(busy||!items.length)return;
  if(location.protocol==='file:'){status('この画面は file:// で開いているため、ダウンロードフォルダへフォルダ保存できません。GitHub Pages（https://）か http://localhost:8000/賃貸写真整理.html で開き直してください。');return}
  if(!window.showDirectoryPicker){status('このブラウザはフォルダ保存に対応していません。EdgeまたはChromeで開いてください。');return}
- let parent;try{parent=await window.showDirectoryPicker({mode:'readwrite',id:'rental-photos'})}catch(e){status(e.name==='AbortError'?'フォルダ選択をキャンセルしました。':e.name==='NotAllowedError'?'フォルダ選択がブロックされました。GitHub Pagesを通常のChrome/Edgeタブで開き、保存ボタンからもう一度お試しください。':'保存先を開けませんでした：'+e.message);return}
+ let parent;try{parent=await window.showDirectoryPicker({mode:'readwrite',id:'naraberu-photo-output-v2',startIn:'pictures'})}catch(e){status(e.name==='AbortError'?'フォルダ選択をキャンセルしました。':e.name==='NotAllowedError'?'保存専用の空フォルダを選んでください。ピクチャやドキュメントの大元ではなく、その中に「ならべる保存先」フォルダを作ると保存できます。':'保存先を開けませんでした：'+e.message);return}
  busy=true;cancel=false;render();let saved=0,folderName='',folder;try{
  const base=propertyName()||'登録写真_'+new Date().toISOString().replace(/[:.]/g,'-');
  for(let suffix=0;;suffix++){folderName=base+(suffix?'_'+suffix:'');try{await parent.getDirectoryHandle(folderName)}catch(e){if(e.name==='NotFoundError'){folder=await parent.getDirectoryHandle(folderName,{create:true});break}if(e.name!=='TypeMismatchError')throw e}}
